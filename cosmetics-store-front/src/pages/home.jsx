@@ -5,7 +5,15 @@ import { motion } from "framer-motion";
 import SkinCareForm from "../component/SkinCareForm";
 import SideMenu from "../component/sideMenu";
 import logo from "../assets/logo.png";
-import { FiSun, FiMoon, FiShoppingCart, FiUser } from "react-icons/fi";
+import pig from "../assets/pig.jpg";
+import acne from "../assets/acne.jpg";
+import pimples from "../assets/pimples.jpeg";
+import darkcircles from "../assets/darkcircles.jpg";
+import skintone from "../assets/skintone.jpg";
+import dryskin2 from "../assets/dryskin2.jpg";
+import oilyskin from "../assets/oilyskin.jpg";
+import glowskin from "../assets/glowskin.jpg";
+import { FiSun, FiMoon, FiShoppingCart, FiUser, FiMail, FiMenu, FiCheckCircle, FiShield, FiActivity, FiDroplet } from "react-icons/fi";
 
 const Home = () => {
   const { user, logout } = useAuth();
@@ -17,12 +25,98 @@ const Home = () => {
     setDarkMode(!darkMode);
   };
 
+  const skinConcerns = [
+    { 
+      title: "Pigmentation", 
+      description: "Advanced formula to reduce dark spots and even out skin tone.", 
+      image: pig,
+      info: "Hyperpigmentation occurs when melanin is overproduced in certain areas of the skin. Our treatment combines clinically-proven brightening agents to target discoloration at its source.",
+      causes: "Sun exposure, hormonal changes (melasma), post-inflammatory hyperpigmentation (acne scars), aging, genetic factors",
+      symptoms: "Dark spots, uneven skin tone, patches darker than natural skin color",
+      solution: "Daily SPF 30+, vitamin C serum, niacinamide treatments, chemical peels, laser therapy",
+      keyIngredients: "Niacinamide, Vitamin C, Alpha Arbutin, Licorice Root Extract"
+    },
+    { 
+      title: "Acne and Darkspot", 
+      description: "Complete regimen to treat and prevent breakouts effectively.", 
+      image: acne,
+      info: "Acne vulgaris is a multifactorial condition involving excess oil production, clogged pores, bacteria, and inflammation. Our system treats active breakouts while preventing future ones and fading post-acne marks.",
+      causes: "Hormonal fluctuations, stress, comedogenic products, bacteria (C. acnes), excess sebum production",
+      symptoms: "Whiteheads, blackheads, papules, pustules, cysts, post-inflammatory erythema/hyperpigmentation",
+      solution: "Salicylic acid cleanser, benzoyl peroxide spot treatment, retinoids, oil-free moisturizers, non-comedogenic products",
+      keyIngredients: "Salicylic Acid, Benzoyl Peroxide, Retinol, Tea Tree Oil, Zinc PCA"
+    },
+    { 
+      title: "Pimples", 
+      description: "Targeted treatment for active breakouts and inflammation.", 
+      image: pimples,
+      info: "Pimples are inflamed acne lesions that develop when pores become clogged and infected. Our fast-acting formula reduces redness, swelling, and bacteria count within hours.",
+      causes: "Clogged hair follicles, bacterial infection (P. acnes), excess oil production, dead skin cell accumulation",
+      symptoms: "Tender red bumps, pus-filled lesions, localized swelling, possible scarring if picked",
+      solution: "Avoid picking, use anti-inflammatory ingredients, apply ice to reduce swelling, maintain clean skin",
+      keyIngredients: "Benzoyl Peroxide, Sulfur, Niacinamide, Allantoin, Centella Asiatica"
+    },
+    { 
+      title: "Skintone and Tanning", 
+      description: "Solutions for uneven tone and sun-induced darkening.", 
+      image: skintone,
+      info: "Uneven skin tone results from irregular melanin distribution often caused by UV exposure. Our brightening system inhibits tyrosinase activity while accelerating cellular turnover.",
+      causes: "Sun exposure, pollution, hormonal changes, inflammation, certain medications",
+      symptoms: "Patchy discoloration, darker areas than natural skin tone, lack of radiance",
+      solution: "Daily broad-spectrum sunscreen, antioxidant serums, exfoliation (AHAs/BHAs), skin-brightening agents",
+      keyIngredients: "Vitamin C, Kojic Acid, Tranexamic Acid, Glycolic Acid, Mulberry Extract"
+    },
+    { 
+      title: "Dark Circles & Dullness", 
+      description: "Revitalizing treatment for tired-looking eyes.", 
+      image: darkcircles,
+      info: "Under-eye darkness stems from multiple factors including thin skin revealing blood vessels, pigmentation, and shadowing. Our treatment combines multiple approaches for comprehensive improvement.",
+      causes: "Genetics, lack of sleep, allergies, dehydration, aging, iron deficiency, sun exposure",
+      symptoms: "Dark purple/blue/brown discoloration under eyes, hollow appearance, fine lines",
+      solution: "Adequate sleep, hydration, cold compresses, caffeine serums, vitamin K creams, sunscreen",
+      keyIngredients: "Caffeine, Vitamin K, Peptides, Hyaluronic Acid, Haloxyl"
+    },
+    { 
+      title: "Dry Skin", 
+      description: "Intensive hydration for parched, flaky skin.", 
+      image: dryskin2,
+      info: "Xerosis (dry skin) occurs when the skin barrier is compromised and unable to retain moisture. Our ceramide-rich formula repairs while providing immediate and long-lasting hydration.",
+      causes: "Cold/dry weather, low humidity, harsh cleansers, hot showers, aging, certain medical conditions",
+      symptoms: "Flaking, scaling, redness, tightness, rough texture, increased visibility of fine lines",
+      solution: "Gentle cleansers, humidifiers, occlusive moisturizers, shorter showers with lukewarm water",
+      keyIngredients: "Ceramides, Hyaluronic Acid, Shea Butter, Squalane, Cholesterol"
+    },
+    { 
+      title: "Glow Skin", 
+      description: "Radiance-boosting regimen for luminous skin.", 
+      image: glowskin,
+      info: "Dull skin results from accumulated dead skin cells and poor microcirculation. Our glow system exfoliates, stimulates cell turnover, and enhances radiance for lit-from-within brightness.",
+      causes: "Dead skin accumulation, dehydration, poor circulation, stress, pollution, lack of sleep",
+      symptoms: "Lackluster appearance, rough texture, uneven tone, fatigue-looking complexion",
+      solution: "Regular exfoliation, facial massage, hydrating masks, antioxidant serums, adequate sleep",
+      keyIngredients: "Glycolic Acid, Vitamin C, Niacinamide, Turmeric Extract, Illuminating Mica"
+    },
+    { 
+      title: "Oily Skin", 
+      description: "Oil-control solutions for shine-free complexion.", 
+      image: oilyskin,
+      info: "Seborrhea (oily skin) occurs when sebaceous glands produce excess sebum. Our oil-control system regulates without over-drying, preventing the rebound oiliness caused by harsh products.",
+      causes: "Genetics, hormones, humidity, using wrong products (over-stripping), stress",
+      symptoms: "Shiny appearance, enlarged pores, frequent breakouts, makeup breakdown",
+      solution: "Oil-free products, blotting papers, balanced cleansing (not over-drying), clay masks",
+      keyIngredients: "Niacinamide, Zinc PCA, Willow Bark Extract, Kaolin Clay, Mattifying Polymers"
+    }
+  ];
+
   return (
     <motion.div 
+      className="main-container"
       style={{
-        ...styles.container,
         backgroundColor: darkMode ? "#121212" : "#f8f9fa",
-        color: darkMode ? "#ffffff" : "#333333"
+        color: darkMode ? "#ffffff" : "#333333",
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -30,58 +124,71 @@ const Home = () => {
     >
       <SideMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} darkMode={darkMode} />
 
-      {/* Header */}
+      {/* Header - Optimized for Mobile */}
       <header style={{
-        ...styles.header,
         backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
-        boxShadow: darkMode ? "0px 3px 10px rgba(255, 255, 255, 0.05)" : "0px 3px 10px rgba(0, 0, 0, 0.1)"
+        boxShadow: darkMode ? "0px 3px 10px rgba(255, 255, 255, 0.05)" : "0px 3px 10px rgba(0, 0, 0, 0.1)",
+        width: "100%",
+        height: "70px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "0 20px",
+        position: "fixed",
+        top: 0,
+        zIndex: 1000,
       }}>
-        <div style={styles.logoContainer}>
-          <motion.div
-            whileHover={{ rotate: 360 }}
-            transition={{ duration: 1 }}
+        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+          <motion.button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            style={styles.menuButton}
+            whileTap={{ scale: 0.9 }}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '5px'
+            }}
+            aria-label="Menu"
           >
-            <div style={{...styles.menuLine, backgroundColor: darkMode ? "#fff" : "#333"}} />
-            <div style={{...styles.menuLine, backgroundColor: darkMode ? "#fff" : "#333"}} />
-            <div style={{...styles.menuLine, backgroundColor: darkMode ? "#fff" : "#333"}} />
-          </motion.div>
+            <FiMenu size={24} color={darkMode ? "#fff" : "#333"} />
+          </motion.button>
           
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            style={styles.logoWrapper}
+          <motion.div 
+            style={{ display: "flex", alignItems: "center", gap: "10px" }}
+            whileHover={{ scale: 1.05 }}
           >
-            <motion.img
+            <img
               src={logo}
               alt="Logo"
-              style={styles.logo}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
+              style={{ height: "40px" }}
             />
-            <motion.span 
-              style={{...styles.logoText, color: darkMode ? "#fff" : "#333"}}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
+            <span style={{
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+              color: darkMode ? "#fff" : "#333",
+              display: window.innerWidth > 768 ? "block" : "none"
+            }}>
               LORD GLORY
-            </motion.span>
+            </span>
           </motion.div>
         </div>
 
-        <nav style={styles.nav}>
-          <a href="#about" style={{...styles.link, color: darkMode ? "#bb86fc" : "#007bff"}}>About Us</a>
-          
+        <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
           <motion.button 
-            style={{...styles.themeToggle, backgroundColor: darkMode ? "#333" : "#ddd"}}
             onClick={toggleTheme}
             whileTap={{ scale: 0.9 }}
+            style={{
+              background: darkMode ? "#333" : "#ddd",
+              border: 'none',
+              borderRadius: '50%',
+              width: '36px',
+              height: '36px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}
+            aria-label="Toggle theme"
           >
             {darkMode ? <FiSun color="#ffeb3b" /> : <FiMoon color="#333" />}
           </motion.button>
@@ -89,49 +196,91 @@ const Home = () => {
           {user ? (
             <>
               <motion.button 
-                style={{...buttonStyles.green, backgroundColor: darkMode ? "#4caf50" : "#28a745"}}
                 onClick={() => navigate("/orders")}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                style={{
+                  background: darkMode ? "#4caf50" : "#28a745",
+                  color: "#fff",
+                  border: 'none',
+                  borderRadius: '20px',
+                  padding: '8px 15px',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
               >
-                <FiShoppingCart style={{ marginRight: 8 }} /> My Orders
+                <FiShoppingCart />
+                <span style={{ display: window.innerWidth > 480 ? "inline" : "none" }}>Orders</span>
               </motion.button>
               <motion.button 
-                style={{...buttonStyles.red, backgroundColor: darkMode ? "#f44336" : "#dc3545"}}
                 onClick={logout}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                style={{
+                  background: darkMode ? "#f44336" : "#dc3545",
+                  color: "#fff",
+                  border: 'none',
+                  borderRadius: '20px',
+                  padding: '8px 15px',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
               >
-                <FiUser style={{ marginRight: 8 }} /> Logout
+                <FiUser />
+                <span style={{ display: window.innerWidth > 480 ? "inline" : "none" }}>Logout</span>
               </motion.button>
             </>
           ) : (
             <>
               <motion.button 
-                style={{...buttonStyles.blue, backgroundColor: darkMode ? "#2196f3" : "#007bff"}}
                 onClick={() => navigate("/login")}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                style={{
+                  background: darkMode ? "#2196f3" : "#007bff",
+                  color: "#fff",
+                  border: 'none',
+                  borderRadius: '20px',
+                  padding: '8px 15px',
+                  fontSize: '14px'
+                }}
               >
                 Login
               </motion.button>
               <motion.button 
-                style={{...buttonStyles.orange, backgroundColor: darkMode ? "#ff9800" : "#ff9800"}}
                 onClick={() => navigate("/register")}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                style={{
+                  background: "#ff9800",
+                  color: "#fff",
+                  border: 'none',
+                  borderRadius: '20px',
+                  padding: '8px 15px',
+                  fontSize: '14px',
+                  display: window.innerWidth > 480 ? "block" : "none"
+                }}
               >
                 Register
               </motion.button>
             </>
           )}
-        </nav>
+        </div>
       </header>
 
-      <main style={styles.mainContent}>
+      <main style={{ marginTop: "70px", flex: 1 }}>
         {user ? (
-          <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-            {/* Trust Building Section */}
+          <div style={{ 
+            width: '100%', 
+            maxWidth: '1200px', 
+            margin: '0 auto', 
+            padding: '20px' 
+          }}>
+            {/* Enhanced Trust Building Section */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -140,125 +289,217 @@ const Home = () => {
                 backgroundColor: darkMode ? "#2d2d2d" : "#ffffff",
                 borderRadius: '12px',
                 padding: '30px',
-                marginBottom: '40px',
+                marginBottom: '30px',
                 boxShadow: darkMode 
                   ? "0 4px 20px rgba(0, 0, 0, 0.3)" 
-                  : "0 4px 20px rgba(0, 0, 0, 0.1)"
+                  : "0 4px 20px rgba(0, 0, 0, 0.1)",
+                border: darkMode ? "1px solid #444" : "1px solid #e0e0e0"
               }}
             >
-              <h1 style={{
-                color: darkMode ? "#bb86fc" : "#007bff",
-                fontSize: '2rem',
-                marginBottom: '20px',
-                textAlign: 'center'
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '25px'
               }}>
-                Why Trust Our Skin Care Treatment?
-              </h1>
+                <FiShield size={32} color={darkMode ? "#bb86fc" : "#007bff"} />
+                <h1 style={{
+                  color: darkMode ? "#bb86fc" : "#007bff",
+                  fontSize: '1.8rem',
+                  marginLeft: '15px',
+                  textAlign: 'center'
+                }}>
+                  FDA-Approved Skincare Solutions
+                </h1>
+              </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '30px' }}>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                gap: '25px',
+                marginTop: '30px'
+              }}>
                 <TrustCard 
                   darkMode={darkMode}
-                  title="Dermatologist Approved"
-                  content="All our products are developed in collaboration with board-certified dermatologists to ensure safety and efficacy."
-                  icon="👩‍⚕️"
+                  title="FDA Certified"
+                  content="All our products meet strict FDA standards for safety and efficacy."
+                  icon={<FiCheckCircle size={28} color={darkMode ? "#bb86fc" : "#007bff"} />}
                 />
                 <TrustCard 
                   darkMode={darkMode}
-                  title="Clinically Proven"
-                  content="Our formulas are backed by clinical studies showing visible results in 4-8 weeks of regular use."
-                  icon="🔬"
+                  title="Clinically Tested"
+                  content="Developed with dermatologists to ensure skin compatibility."
+                  icon={<FiActivity size={28} color={darkMode ? "#bb86fc" : "#007bff"} />}
                 />
                 <TrustCard 
                   darkMode={darkMode}
-                  title="Natural Ingredients"
-                  content="We use 95% naturally derived ingredients combined with scientifically proven actives for optimal results."
-                  icon="🌿"
+                  title="Natural & Effective"
+                  content="95% naturally derived ingredients with proven results."
+                  icon={<FiDroplet size={28} color={darkMode ? "#bb86fc" : "#007bff"} />}
                 />
               </div>
+
+              <motion.div 
+                style={{
+                  marginTop: '30px',
+                  padding: '20px',
+                  backgroundColor: darkMode ? '#1e1e1e' : '#f0f8ff',
+                  borderRadius: '10px',
+                  borderLeft: `4px solid ${darkMode ? '#bb86fc' : '#007bff'}`
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <p style={{
+                  color: darkMode ? '#ffffff' : '#333333',
+                  textAlign: 'center',
+                  lineHeight: '1.6'
+                }}>
+                  <strong>Note:</strong> Our FDA approval means each product has undergone rigorous testing 
+                  to ensure safety and effectiveness for your specific skin concerns.
+                </p>
+              </motion.div>
             </motion.div>
 
-            {/* Skin Care Form Section */}
+            {/* Enhanced Skin Care Form Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
+              style={{
+                backgroundColor: darkMode ? "#2d2d2d" : "#ffffff",
+                borderRadius: '12px',
+                padding: '30px',
+                boxShadow: darkMode 
+                  ? "0 4px 20px rgba(0, 0, 0, 0.3)" 
+                  : "0 4px 20px rgba(0, 0, 0, 0.1)",
+                border: darkMode ? "1px solid #444" : "1px solid #e0e0e0"
+              }}
             >
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '25px'
+              }}>
+                <div style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  backgroundColor: darkMode ? '#bb86fc20' : '#007bff20',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: '15px'
+                }}>
+                  <FiUser size={24} color={darkMode ? "#bb86fc" : "#007bff"} />
+                </div>
+                <div>
+                  <h2 style={{
+                    color: darkMode ? "#ffffff" : "#333333",
+                    fontSize: '1.5rem',
+                    marginBottom: '5px'
+                  }}>
+                    Personalized Skin Analysis
+                  </h2>
+                  <p style={{
+                    color: darkMode ? "#cccccc" : "#666666",
+                    fontSize: '0.9rem'
+                  }}>
+                    Complete this form to get customized recommendations
+                  </p>
+                </div>
+              </div>
+
               <SkinCareForm darkMode={darkMode} />
             </motion.div>
           </div>
         ) : (
           <>
-            {/* Pre-login content remains the same */}
-            <motion.section style={{
-              ...styles.heroSection,
-              backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
-              boxShadow: darkMode ? "0px 5px 15px rgba(255, 255, 255, 0.05)" : "0px 5px 15px rgba(0, 0, 0, 0.1)"
-            }}>
+            {/* Hero Section */}
+            <motion.section 
+              style={{
+                backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
+                boxShadow: darkMode 
+                  ? "0px 5px 15px rgba(255, 255, 255, 0.05)" 
+                  : "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                textAlign: "center",
+                padding: "40px 20px",
+                margin: "20px",
+                borderRadius: "15px"
+              }}
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
               <motion.h1 
                 style={{
-                  ...styles.title,
                   color: darkMode ? "#bb86fc" : "#007bff",
-                  textShadow: darkMode ? "0 0 10px rgba(187, 134, 252, 0.5)" : "0 0 10px rgba(0, 123, 255, 0.3)"
+                  fontSize: "2rem",
+                  marginBottom: "15px",
+                  fontWeight: "700"
                 }}
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5 }}
               >
                 LORD GLORY
               </motion.h1>
               <motion.h2 
                 style={{
-                  ...styles.subtitle,
-                  color: darkMode ? "#ffffff" : "#333333"
+                  color: darkMode ? "#ffffff" : "#333333",
+                  fontSize: "1.5rem",
+                  marginBottom: "20px",
+                  fontWeight: "400"
                 }}
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
               >
-                Your Skin Deserves the Best 
+                FDA-Approved Skincare
               </motion.h2>
               <motion.p 
                 style={{
-                  ...styles.description,
-                  color: darkMode ? "#cccccc" : "#666666"
-                }}
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                Backed by science, loved by thousands. 98% of our customers saw visible results in just 4 weeks!
+                  color: darkMode ? "#cccccc" : "#666666",
+                  fontSize: "1rem",
+                  marginBottom: "30px",
+                  lineHeight: "1.6",
+                  maxWidth: "600px",
+                  margin: "0 auto 30px"
+                }}>
+                98% of customers saw visible results in just 4 weeks!
               </motion.p>
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.6 }}
+              <motion.button
+                style={{
+                  backgroundColor: darkMode ? "#bb86fc" : "#007bff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "30px",
+                  padding: "12px 30px",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  margin: "0 auto"
+                }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: darkMode 
+                    ? "0 0 15px rgba(187, 134, 252, 0.7)" 
+                    : "0 0 15px rgba(0, 123, 255, 0.5)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate("/register")}
               >
-                <motion.button
-                  style={{
-                    ...buttonStyles.cta,
-                    backgroundColor: darkMode ? "#bb86fc" : "#007bff"
-                  }}
-                  whileHover={{ 
-                    scale: 1.05,
-                    boxShadow: darkMode 
-                      ? "0 0 15px rgba(187, 134, 252, 0.7)" 
-                      : "0 0 15px rgba(0, 123, 255, 0.5)"
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate("/register")}
-                >
-                  Get Started
-                </motion.button>
-              </motion.div>
+                Get Started
+              </motion.button>
             </motion.section>
 
-            {/* Products Grid Section */}
-            <section style={styles.productsSection}>
-              <div style={styles.sectionHeader}>
+            {/* Products Section */}
+            <section style={{ 
+              padding: "40px 20px",
+              maxWidth: "1200px",
+              margin: "0 auto"
+            }}>
+              <div style={{ textAlign: "center", marginBottom: "40px" }}>
                 <motion.h2 
                   style={{
                     color: darkMode ? "#bb86fc" : "#007bff",
-                    fontSize: "2rem",
+                    fontSize: "1.8rem",
                     marginBottom: "1rem"
                   }}
                   initial={{ opacity: 0, y: 20 }}
@@ -271,25 +512,30 @@ const Home = () => {
                   style={{
                     color: darkMode ? "#cccccc" : "#666666",
                     maxWidth: "600px",
-                    marginBottom: "2rem"
+                    margin: "0 auto"
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 }}
                 >
-                  Scientifically formulated to address your specific skin concerns
+                  Scientifically formulated for your skin concerns
                 </motion.p>
               </div>
 
-              {/* First row of 4 boxes */}
-              <div style={styles.productsRow}>
-                {skinConcerns.slice(0, 4).map((product, index) => (
+              <div style={{ 
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                gap: "20px",
+                padding: "0 10px"
+              }}>
+                {skinConcerns.map((product, index) => (
                   <motion.div
                     key={index}
                     style={{
-                      ...styles.productCard,
                       backgroundColor: darkMode ? "#2d2d2d" : "#ffffff",
+                      borderRadius: "12px",
+                      overflow: "hidden",
                       boxShadow: darkMode 
                         ? "0 4px 20px rgba(0, 0, 0, 0.3)" 
                         : "0 4px 20px rgba(0, 0, 0, 0.1)"
@@ -305,63 +551,22 @@ const Home = () => {
                         : "0 10px 25px rgba(0, 123, 255, 0.3)"
                     }}
                   >
-                    <div style={styles.productImageContainer}>
+                    <div style={{ 
+                      height: "200px",
+                      overflow: "hidden"
+                    }}>
                       <img 
                         src={product.image} 
                         alt={product.title}
-                        style={styles.productImage}
+                        style={{ 
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          transition: "transform 0.3s ease"
+                        }}
                       />
                     </div>
-                    <div style={styles.productContent}>
-                      <h3 style={{
-                        color: darkMode ? "#ffffff" : "#333333",
-                        fontSize: "1.3rem",
-                        marginBottom: "0.5rem"
-                      }}>
-                        {product.title}
-                      </h3>
-                      <p style={{
-                        color: darkMode ? "#cccccc" : "#666666",
-                        lineHeight: "1.5"
-                      }}>
-                        {product.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Second row of 4 boxes */}
-              <div style={styles.productsRow}>
-                {skinConcerns.slice(4, 8).map((product, index) => (
-                  <motion.div
-                    key={index + 4}
-                    style={{
-                      ...styles.productCard,
-                      backgroundColor: darkMode ? "#2d2d2d" : "#ffffff",
-                      boxShadow: darkMode 
-                        ? "0 4px 20px rgba(0, 0, 0, 0.3)" 
-                        : "0 4px 20px rgba(0, 0, 0, 0.1)"
-                    }}
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: (index + 4) * 0.1 }}
-                    whileHover={{ 
-                      y: -10,
-                      boxShadow: darkMode 
-                        ? "0 10px 25px rgba(187, 134, 252, 0.4)" 
-                        : "0 10px 25px rgba(0, 123, 255, 0.3)"
-                    }}
-                  >
-                    <div style={styles.productImageContainer}>
-                      <img 
-                        src={product.image} 
-                        alt={product.title}
-                        style={styles.productImage}
-                      />
-                    </div>
-                    <div style={styles.productContent}>
+                    <div style={{ padding: "20px" }}>
                       <h3 style={{
                         color: darkMode ? "#ffffff" : "#333333",
                         fontSize: "1.3rem",
@@ -384,42 +589,123 @@ const Home = () => {
         )}
       </main>
 
-      <footer id="about" style={{
-        ...styles.footer,
+      {/* Enhanced Footer */}
+      <footer style={{
         backgroundColor: darkMode ? "#1e1e1e" : "#007bff",
-        borderTop: darkMode ? "1px solid #333" : "none",
-        color: "#ffffff"
+        color: "#ffffff",
+        padding: "40px 20px",
+        marginTop: "auto"
       }}>
-        <motion.h2 
-          style={{ marginBottom: "20px" }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          About Us
-        </motion.h2>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "40px",
+          maxWidth: "1200px",
+          margin: "0 auto"
+        }}>
+          {/* Developed By */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 style={{
+              fontSize: "1.2rem",
+              marginBottom: "15px",
+              fontWeight: "600"
+            }}>
+              Designed and Developed by 
+            </h3>
+            <p style={{ marginBottom: "5px" }}>Ashish Ghatol</p>
+            <p> ashishghatol098@gmail.com</p>
+          </motion.div>
+
+          {/* Contact */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
+            <h3 style={{
+              fontSize: "1.2rem",
+              marginBottom: "15px",
+              fontWeight: "600"
+            }}>
+              Contact Us
+            </h3>
+            <div style={{ 
+              display: "flex", 
+              alignItems: "center",
+              justifyContent: "flex-start",
+              gap: "8px"
+            }}>
+              <FiMail />
+              <a 
+                href="mailto:lordglory@gmail.com" 
+                style={{ 
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  ":hover": {
+                    textDecoration: "underline"
+                  }
+                }}
+              >
+                lordgloryindia@gmail.com,
+                <br/>
+                -8551062783
+              </a>
+            </div>
+          </motion.div>
+
+          {/* About Us */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <h3 style={{
+              fontSize: "1.2rem",
+              marginBottom: "15px",
+              fontWeight: "600"
+            }}>
+              About Us
+            </h3>
+            <p>
+              Lord Glory provides Clinically-approved skincare solutions backed by science and loved by users worldwide.
+            </p>
+          </motion.div>
+        </div>
+
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
+          style={{ 
+            textAlign: "center",
+            marginTop: "40px",
+            fontSize: "0.9rem",
+            opacity: 0.8
+          }}
         >
-          Lord Glory is dedicated to providing top-tier skincare solutions,  loved by users . We believe in self-care through science-backed products.
+          © {new Date().getFullYear()} Lord Glory. All rights reserved.
         </motion.p>
       </footer>
     </motion.div>
   );
 };
 
-// Trust Card Component
+// Enhanced Trust Card Component
 const TrustCard = ({ darkMode, title, content, icon }) => (
   <motion.div
     style={{
       backgroundColor: darkMode ? "#1e1e1e" : "#f8f9fa",
       borderRadius: '10px',
-      padding: '20px',
+      padding: '25px',
       textAlign: 'center',
-      transition: 'all 0.3s ease'
+      border: darkMode ? "1px solid #444" : "1px solid #e0e0e0",
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
     }}
     whileHover={{ 
       y: -5,
@@ -429,302 +715,32 @@ const TrustCard = ({ darkMode, title, content, icon }) => (
     }}
   >
     <div style={{ 
-      fontSize: '2.5rem',
-      marginBottom: '15px'
+      width: '60px',
+      height: '60px',
+      borderRadius: '50%',
+      backgroundColor: darkMode ? '#bb86fc20' : '#007bff20',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: '20px'
     }}>
       {icon}
     </div>
     <h3 style={{ 
       color: darkMode ? "#bb86fc" : "#007bff",
-      marginBottom: '10px'
+      marginBottom: '15px',
+      fontSize: '1.2rem'
     }}>
       {title}
     </h3>
     <p style={{ 
       color: darkMode ? "#cccccc" : "#666666",
-      lineHeight: '1.5'
+      lineHeight: '1.6',
+      flex: 1
     }}>
       {content}
     </p>
   </motion.div>
 );
-
-// Skin Concerns Data
-const skinConcerns = [
-  { 
-    title: "Pigmentation Solution", 
-    description: "Advanced formula to reduce dark spots and even out skin tone.", 
-    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-  { 
-    title: "Acne Control System", 
-    description: "Complete regimen to treat and prevent breakouts effectively.", 
-    image: "https://images.unsplash.com/photo-1540200049844-17b7a354d6f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-  { 
-    title: "Radiance Booster", 
-    description: "Brightening treatment that revitalizes dull skin instantly.", 
-    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-  { 
-    title: "Anti-Aging Complex", 
-    description: "Powerful ingredients to reduce fine lines and wrinkles.", 
-    image: "https://images.unsplash.com/photo-1556228578-9f4d58a4f7a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-  { 
-    title: "Hydration Serum", 
-    description: "Deep moisturizing formula for dry and dehydrated skin.", 
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-  { 
-    title: "Sensitive Skin Relief", 
-    description: "Gentle formula to calm and soothe irritated skin.", 
-    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-  { 
-    title: "Pore Minimizer", 
-    description: "Specialized treatment to refine pores and smooth texture.", 
-    image: "https://images.unsplash.com/photo-1556228578-6cee6429e6b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-  { 
-    title: "Night Repair Cream", 
-    description: "Overnight renewal treatment for healthier-looking skin.", 
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-  },
-];
-
-// Styles
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    width: "100%",
-    minHeight: "100vh",
-    transition: "background-color 0.3s ease, color 0.3s ease",
-  },
-  header: {
-    width: "100%",
-    height: "80px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    position: "fixed",
-    top: 0,
-    zIndex: 1000,
-    padding: "0 20px",
-    transition: "background-color 0.3s ease, box-shadow 0.3s ease",
-  },
-  logoContainer: {
-    display: "flex",
-    alignItems: "center",
-    gap: "15px"
-  },
-  menuButton: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    height: "24px",
-    width: "30px",
-    cursor: "pointer",
-    zIndex: 1100
-  },
-  menuLine: {
-    height: "3px",
-    width: "100%",
-    borderRadius: "3px",
-    transition: "all 0.3s ease"
-  },
-  logoWrapper: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px"
-  },
-  logoText: {
-    fontWeight: "bold",
-    fontSize: "1.2rem",
-    letterSpacing: "1px"
-  },
-  mainContent: {
-    marginTop: "80px",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "20px 0",
-  },
-  logo: {
-    height: "50px",
-    cursor: "pointer",
-    filter: "drop-shadow(0 0 5px rgba(0,0,0,0.2))",
-  },
-  nav: {
-    display: "flex",
-    gap: "15px",
-    alignItems: "center",
-  },
-  link: { 
-    textDecoration: "none",
-    fontSize: "14px",
-    fontWeight: "500",
-    transition: "color 0.3s ease",
-    padding: "8px 12px",
-    borderRadius: "5px",
-    ":hover": {
-      backgroundColor: "rgba(0,0,0,0.1)"
-    }
-  },
-  themeToggle: {
-    border: "none",
-    borderRadius: "50%",
-    width: "36px",
-    height: "36px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-    margin: "0 10px"
-  },
-  heroSection: {
-    textAlign: "center",
-    padding: "60px 30px",
-    width: "90%",
-    maxWidth: "800px",
-    borderRadius: "15px",
-    margin: "40px 0",
-    transition: "all 0.3s ease",
-  },
-  title: {
-    fontSize: "2.5rem",
-    marginBottom: "15px",
-    fontWeight: "700",
-    letterSpacing: "1px",
-    transition: "all 0.3s ease",
-  },
-  subtitle: {
-    fontSize: "1.5rem",
-    marginBottom: "20px",
-    fontWeight: "400",
-    transition: "all 0.3s ease",
-  },
-  description: {
-    fontSize: "1rem",
-    marginBottom: "30px",
-    lineHeight: "1.6",
-    transition: "all 0.3s ease",
-  },
-  productsSection: {
-    width: "100%",
-    padding: "60px 20px",
-    maxWidth: "1200px",
-    margin: "0 auto"
-  },
-  sectionHeader: {
-    textAlign: "center",
-    marginBottom: "40px"
-  },
-  productsRow: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    gap: "30px",
-    marginBottom: "30px"
-  },
-  productCard: {
-    borderRadius: "12px",
-    overflow: "hidden",
-    transition: "all 0.3s ease",
-    display: "flex",
-    flexDirection: "column",
-    width: "260px",
-    flexShrink: 0
-  },
-  productImageContainer: {
-    width: "100%",
-    height: "220px",
-    overflow: "hidden"
-  },
-  productImage: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    transition: "transform 0.3s ease",
-    ":hover": {
-      transform: "scale(1.05)"
-    }
-  },
-  productContent: {
-    padding: "20px",
-    flex: 1,
-    display: "flex",
-    flexDirection: "column"
-  },
-  footer: {
-    marginTop: "auto",
-    padding: "60px 30px",
-    textAlign: "center",
-    width: "100%",
-    transition: "background-color 0.3s ease",
-  },
-};
-
-const buttonStyles = {
-  green: { 
-    padding: "10px 20px",
-    color: "#fff",
-    borderRadius: "30px",
-    cursor: "pointer",
-    border: "none",
-    fontSize: "14px",
-    fontWeight: "500",
-    display: "flex",
-    alignItems: "center",
-    transition: "all 0.3s ease",
-  },
-  red: { 
-    padding: "10px 20px",
-    color: "#fff",
-    borderRadius: "30px",
-    cursor: "pointer",
-    border: "none",
-    fontSize: "14px",
-    fontWeight: "500",
-    display: "flex",
-    alignItems: "center",
-    transition: "all 0.3s ease",
-  },
-  blue: { 
-    padding: "10px 20px",
-    color: "#fff",
-    borderRadius: "30px",
-    cursor: "pointer",
-    border: "none",
-    fontSize: "14px",
-    fontWeight: "500",
-    transition: "all 0.3s ease",
-  },
-  orange: { 
-    padding: "10px 20px",
-    color: "#fff",
-    borderRadius: "30px",
-    cursor: "pointer",
-    border: "none",
-    fontSize: "14px",
-    fontWeight: "500",
-    transition: "all 0.3s ease",
-  },
-  cta: {
-    padding: "12px 30px",
-    color: "#fff",
-    borderRadius: "30px",
-    cursor: "pointer",
-    border: "none",
-    fontSize: "16px",
-    fontWeight: "600",
-    transition: "all 0.3s ease",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  }
-};
 
 export default Home;
