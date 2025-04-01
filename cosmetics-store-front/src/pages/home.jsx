@@ -614,10 +614,10 @@ const Home = () => {
               marginBottom: "15px",
               fontWeight: "600"
             }}>
-              Designed and Developed by 
+              
             </h3>
-            <p style={{ marginBottom: "5px" }}>Ashish Ghatol</p>
-            <p> ashishghatol098@gmail.com</p>
+            <p style={{ marginBottom: "5px" }}></p>
+            <p> </p>
           </motion.div>
 
           {/* Contact */}
