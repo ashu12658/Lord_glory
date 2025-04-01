@@ -1,0 +1,61 @@
+/* Side Menu Styling */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Hidden initially */
+    width: 250px;
+    height: 100vh;
+    background-color: #222;
+    color: white;
+    padding: 20px;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .side-menu.open {
+    left: 0; /* Show menu */
+  }
+  
+  .menu-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #ff758c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 5px;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    float: right;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  ul li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  ul li:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .logout {
+    color: red;
+    font-weight: bold;
+  }
+  

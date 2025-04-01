@@ -1,0 +1,72 @@
+.loading-spinner {
+  font-size: 1.5em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+  font-size: 1.2em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.order-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.order-item {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.order-id {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.order-status,
+.order-total {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.order-products {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-product {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.product-name {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.product-description {
+  font-size: 1em;
+  margin-bottom: 5px;
+}
+
+.product-price {
+  font-size: 1.1em;
+  color: green;
+}
+
+.empty-orders {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.empty-orders-img {
+  margin-top: 10px;
+}
