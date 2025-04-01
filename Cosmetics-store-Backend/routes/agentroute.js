@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const agentController = require('../controllers/agentcontroller');
-const { protect, admin, agent } = require('../middleware/authMiddleware');
+const { protect, admin, agent } = require('../middleware/authmiddleware');
 
 // Auth routes - no middleware needed
 router.post('/login', agentController.agentLogin); // Make sure this is defined first

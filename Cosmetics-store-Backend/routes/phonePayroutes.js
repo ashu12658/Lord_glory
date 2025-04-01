@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const Order = require("../models/order");
 const Coupon = require("../models/coupenCode"); // ✅ Import Coupon model
-const { protect } = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/authmiddleware');
 const Agent = require("../models/agentSchema");
 
 

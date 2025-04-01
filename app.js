@@ -18,7 +18,6 @@
   const couponRoutes = require("./Cosmetics-store-Backend/routes/coupenRoutes");
 
   // Import Middleware
-  const { protect, admin } = require("./Cosmetics-store-Backend/middleware/authMiddleware");
 
   dotenv.config();
   const app = express();
@@ -65,7 +64,7 @@
   app.use("/api/products", productRoutes);
   app.use("/api/orders", orderRoutes);
   app.use("/api/users", userRoutes);
-  app.use("/api/admin", protect, admin, adminRoutes);
+  app.use("/api/admin",  adminRoutes);
   app.use("/api/skincare", skincareRoutes);
   app.use("/api/reviews", reviewRoutes);
   app.use("/api/agents", agentRoutes);  // Add 'protect' middleware for agent routes if needed
