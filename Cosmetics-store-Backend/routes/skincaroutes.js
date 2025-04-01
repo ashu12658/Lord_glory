@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const skinCareController = require('../controllers/skincontroller');
-const { protect, admin } = require("../middleware/authmiddleware");
+const { protect, admin } = require('../middleware/authMiddleware');
 const upload = require("../middleware/uploadMiddleware"); // Ensure this middleware exists
 
 // Route for submitting the skin care form (only accessible for authenticated users)

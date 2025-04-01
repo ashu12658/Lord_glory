@@ -1,5 +1,5 @@
 const express = require("express");
-const { protect, admin } = require("../middleware/authmiddleware");
+const { protect, admin } = require('../middleware/authMiddleware');
 const {
   getAllOrder,
   createOrder,
@@ -9,7 +9,7 @@ const {
   placeAgentOrder,
   getAgentOrders,
 } = require("../controllers/ordercontroller");
-const { agent } = require("../middleware/authmiddleware");
+const { agent } = require('../middleware/authMiddleware');
 const Admin = require("../models/admin");
 
 const router = express.Router();

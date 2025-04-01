@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Review = require("../models/Review");
-const { protect } = require("../middleware/authmiddleware"); // Middleware for user authentication
+const { protect } = require('../middleware/authMiddleware'); // Middleware for user authentication
 
 const router = express.Router();
 
