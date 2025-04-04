@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authcontext";
-import logo from "../assets/logo.png"; // Import logo
+import logo from "../assets/logo.png";
+import "./style/LoginPage.css"
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -17,18 +18,22 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const apiUrl = "http://localhost:5000/api/auth/login";
+      const apiUrl = process.env.REACT_APP_API_URL + "/auth/login";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
+        credentials: "include"
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Invalid email or password.");
+    console.log(data)
+      if (!response.ok) throw new Error(data.message || "Login failed");
 
       const { token, user } = data;
-      if (!token || typeof user.isAdmin === "undefined") throw new Error("Invalid response from server.");
+      if (!token || typeof user.isAdmin === "undefined") {
+        throw new Error("Invalid server response");
+      }
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
@@ -43,25 +48,19 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <style>
-        {`
-          @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-          }
-        `}
-      </style>
-
-      <div style={styles.card}>
-        <div style={styles.logoContainer}>
-          <img src={logo} alt="Logo" style={styles.logo} />
-          <h1 style={styles.brandName}>SkinCare</h1>
-          <p style={styles.brandTagline}>Your journey to healthier skin starts here.</p>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="logo-container">
+          <img src={logo} alt="Logo" className="logo" />
+          <h1 className="brand-name">SkinCare</h1>
+          <p className="brand-tagline">Your journey to healthier skin starts here.</p>
         </div>
-        <h2 style={styles.heading}>Welcome Back</h2>
-        {error && <p style={styles.errorMessage}>{error}</p>}
-        <form onSubmit={handleLogin} style={styles.form}>
+        
+        <h2 className="login-heading">Welcome Back</h2>
+        
+        {error && <p className="error-message">{error}</p>}
+        
+        <form onSubmit={handleLogin} className="login-form">
           <input
             type="email"
             placeholder="Email Address"
@@ -69,8 +68,9 @@ const LoginPage = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
             disabled={loading}
-            style={styles.input}
+            className="login-input"
           />
+          
           <input
             type="password"
             placeholder="Password"
@@ -78,105 +78,29 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
             disabled={loading}
-            style={styles.input}
+            className="login-input"
           />
-          <button type="submit" disabled={loading} style={styles.button}>
-            {loading ? "Logging in..." : "Login"}
+          
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="login-button"
+          >
+            {loading ? (
+              <>
+                <span className="spinner"></span>
+                Logging in...
+              </>
+            ) : "Login"}
           </button>
         </form>
-        <p style={styles.linkText}>
-          Don't have an account? <a href="/register" style={styles.link}>Sign Up</a>
+        
+        <p className="signup-text">
+          Don't have an account? <a href="/register" className="signup-link">Sign Up</a>
         </p>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    background: "linear-gradient(135deg, #ffffff, #e0f7ff)", // Light background
-  },
-  card: {
-    backgroundColor: "#ffffff",
-    padding: "40px",
-    borderRadius: "12px",
-    boxShadow: "0px 0px 20px rgba(0, 162, 255, 0.8)", // Glowing blue border effect
-    width: "350px",
-    textAlign: "center",
-    transition: "0.3s",
-  },
-  logoContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    marginBottom: "20px",
-  },
-  logo: {
-    width: "60px",
-    height: "60px",
-    animation: "bounce 1.5s infinite ease-in-out", // Smooth bounce effect
-  },
-  brandName: {
-    color: "#007bff",
-    fontSize: "22px",
-    fontWeight: "bold",
-    marginTop: "5px",
-  },
-  brandTagline: {
-    color: "#606060",
-    fontSize: "14px",
-  },
-  heading: {
-    color: "#333333",
-    fontSize: "24px",
-    marginBottom: "15px",
-  },
-  errorMessage: {
-    color: "#ff4d4d",
-    fontSize: "14px",
-    marginBottom: "10px",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "10px",
-    borderRadius: "5px",
-    border: "2px solid #007bff",
-    backgroundColor: "#f8f9fa",
-    color: "#333",
-    fontSize: "14px",
-    outline: "none",
-    transition: "0.3s",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    borderRadius: "5px",
-    border: "none",
-    backgroundColor: "#007bff",
-    color: "#ffffff",
-    fontSize: "16px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    transition: "0.3s",
-  },
-  linkText: {
-    marginTop: "15px",
-    color: "#606060",
-    fontSize: "14px",
-  },
-  link: {
-    color: "#007bff",
-    textDecoration: "none",
-  },
 };
 
 export default LoginPage;

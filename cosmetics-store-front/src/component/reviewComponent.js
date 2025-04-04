@@ -20,7 +20,7 @@ const ReviewComponent = () => {
   useEffect(() => {
     if (!productId) return;
     axios
-      .get(`http://localhost:5000/api/products/${productId}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/products/${productId}`)
       .then((response) => setProduct(response.data))
       .catch(() => setError("❌ Failed to load product details."));
   }, [productId]);
@@ -28,7 +28,7 @@ const ReviewComponent = () => {
   const fetchReviews = useCallback(() => {
     if (!productId) return;
     axios
-      .get(`http://localhost:5000/api/reviews/${productId}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/reviews/${productId}`)
       .then((response) => setReviews(response.data))
       .catch(() => setError("❌ Failed to load reviews."));
   }, [productId]);
@@ -47,7 +47,7 @@ const ReviewComponent = () => {
     if (!productId) return alert("❌ Product ID is missing.");
     try {
       await axios.post(
-        "http://localhost:5000/api/reviews/review",
+        "${process.env.REACT_APP_API_URL}/api/reviews/review",
         { productId, ...formData },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );

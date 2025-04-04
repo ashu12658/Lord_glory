@@ -25,7 +25,7 @@ const AgentDashboard = () => {
         setAgentName(decoded.name || decoded.email || "Agent");
 
         // Fetch agent's order count
-        fetch("http://localhost:5000/api/agents/orders-count", {
+        fetch("${process.env.REACT_APP_API_URL}/api/agents/orders-count", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

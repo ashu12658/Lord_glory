@@ -16,7 +16,7 @@ const AgentBalance = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:5000/api/agents/balance/${agentId}`,
+          `${process.env.REACT_APP_API_URL}/api/agents/balance/${agentId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

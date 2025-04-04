@@ -19,7 +19,7 @@ const OrderForm = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await axios.get("http://localhost:5000/api/products");
+        const response = await axios.get("${process.env.REACT_APP_API_URL}/api/products");
 
         console.log("API Response:", response.data); // ✅ Debugging log
 
@@ -71,7 +71,7 @@ const OrderForm = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:5000/api/orders", orderData, {
+      const response = await axios.post("${process.env.REACT_APP_API_URL}/api/orders", orderData, {
         headers: { "Content-Type": "application/json" },
       });
 

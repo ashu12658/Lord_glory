@@ -15,8 +15,8 @@ const ForgotPassword = () => {
   const requestOtp = async () => {
     try {
       const endpoint = loginMode 
-        ? "http://localhost:5000/api/otp/login-otp" // OTP Login
-        : "http://localhost:5000/api/otp/request-otp"; // Forgot Password OTP
+        ? "${process.env.REACT_APP_API_URL}/api/otp/login-otp" // OTP Login
+        : "${process.env.REACT_APP_API_URL}/api/otp/request-otp"; // Forgot Password OTP
 
       await axios.post(endpoint, { email });
       alert(`✅ OTP sent to ${email}!`);
@@ -31,7 +31,7 @@ const ForgotPassword = () => {
     try {
       if (loginMode) {
         // ✅ Login using OTP
-        const res = await axios.post("http://localhost:5000/api/otp/verify-login-otp", { email, otp });
+        const res = await axios.post("${process.env.REACT_APP_API_URL}/api/otp/verify-login-otp", { email, otp });
   
         if (res.data.token) {
           localStorage.setItem("token", res.data.token); // ✅ Store token
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
         }
       } else {
         // ✅ Reset Password
-        await axios.post("http://localhost:5000/api/otp/reset-password", { email, otp, newPassword });
+        await axios.post("${process.env.REACT_APP_API_URL}/api/otp/reset-password", { email, otp, newPassword });
         alert("✅ Password reset successful! Please log in.");
         navigate("/login");
       }

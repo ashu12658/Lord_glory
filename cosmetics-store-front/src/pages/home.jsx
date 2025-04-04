@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/authcontext";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import SkinCareForm from "../component/SkinCareForm";
 import SideMenu from "../component/sideMenu";
 import logo from "../assets/logo.png";
@@ -13,16 +13,37 @@ import skintone from "../assets/skintone.jpg";
 import dryskin2 from "../assets/dryskin2.jpg";
 import oilyskin from "../assets/oilyskin.jpg";
 import glowskin from "../assets/glowskin.jpg";
-import { FiSun, FiMoon, FiShoppingCart, FiUser, FiMail, FiMenu, FiCheckCircle, FiShield, FiActivity, FiDroplet } from "react-icons/fi";
+import { 
+  FiSun, FiMoon, FiShoppingCart, FiUser, FiMail, FiMenu, 
+  FiCheckCircle, FiShield, FiActivity, FiDroplet, FiChevronDown,
+  FiPhone, FiMapPin, FiInstagram, FiTwitter, FiFacebook, FiYoutube, 
+  FiHeart, FiArrowRight
+} from "react-icons/fi";
 
 const Home = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [expandedFooterItem, setExpandedFooterItem] = useState(null);
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
+  };
+
+  const toggleFooterItem = (item) => {
+    setExpandedFooterItem(expandedFooterItem === item ? null : item);
+  };
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (email) {
+      setIsSubscribed(true);
+      setEmail("");
+      setTimeout(() => setIsSubscribed(false), 3000);
+    }
   };
 
   const skinConcerns = [
@@ -108,6 +129,117 @@ const Home = () => {
     }
   ];
 
+  const footerSections = [
+    {
+      id: "company",
+      title: "Our Company",
+      content: (
+        <motion.div 
+          className="footer-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <p>Lord Glory provides clinically-approved skincare solutions backed by science and loved by users worldwide.</p>
+          <div className="footer-social">
+            <motion.a whileHover={{ y: -3 }} href="#"><FiInstagram size={20} /></motion.a>
+            <motion.a whileHover={{ y: -3 }} href="#"><FiTwitter size={20} /></motion.a>
+            <motion.a whileHover={{ y: -3 }} href="#"><FiFacebook size={20} /></motion.a>
+            <motion.a whileHover={{ y: -3 }} href="#"><FiYoutube size={20} /></motion.a>
+          </div>
+        </motion.div>
+      )
+    },
+    {
+      id: "contact",
+      title: "Contact Us",
+      content: (
+        <motion.div 
+          className="footer-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="contact-item">
+            <FiMail />
+            <a href="mailto:lordgloryindia@gmail.com">lordgloryindia@gmail.com</a>
+          </div>
+          <div className="contact-item">
+            <FiPhone />
+            <span>+91 8551062783</span>
+          </div>
+          <div className="contact-item">
+            <FiMapPin />
+            <span>Bangalore, India</span>
+          </div>
+        </motion.div>
+      )
+    },
+    {
+      id: "links",
+      title: "Quick Links",
+      content: (
+        <motion.div 
+          className="footer-links"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <a href="#">About Us</a>
+          <a href="#">Products</a>
+          <a href="#">Blog</a>
+          <a href="#">Testimonials</a>
+          <a href="#">FAQ</a>
+          <a href="#">Privacy Policy</a>
+        </motion.div>
+      )
+    },
+    {
+      id: "newsletter",
+      title: "Newsletter",
+      content: (
+        <motion.div 
+          className="newsletter-form"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <p>Subscribe to get updates on new products and special offers</p>
+          <form onSubmit={handleSubscribe}>
+            <div className="input-group">
+              <input 
+                type="email" 
+                placeholder="Your email address" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <motion.button 
+                type="submit"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FiArrowRight />
+              </motion.button>
+            </div>
+          </form>
+          <AnimatePresence>
+            {isSubscribed && (
+              <motion.div
+                className="subscription-message"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                Thank you for subscribing!
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      )
+    }
+  ];
+
   return (
     <motion.div 
       className="main-container"
@@ -124,7 +256,7 @@ const Home = () => {
     >
       <SideMenu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} darkMode={darkMode} />
 
-      {/* Header - Optimized for Mobile */}
+      {/* Header */}
       <header style={{
         backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
         boxShadow: darkMode ? "0px 3px 10px rgba(255, 255, 255, 0.05)" : "0px 3px 10px rgba(0, 0, 0, 0.1)",
@@ -280,7 +412,7 @@ const Home = () => {
             margin: '0 auto', 
             padding: '20px' 
           }}>
-            {/* Enhanced Trust Building Section */}
+            {/* Trust Building Section */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -338,31 +470,9 @@ const Home = () => {
                   icon={<FiDroplet size={28} color={darkMode ? "#bb86fc" : "#007bff"} />}
                 />
               </div>
-
-              <motion.div 
-                style={{
-                  marginTop: '30px',
-                  padding: '20px',
-                  backgroundColor: darkMode ? '#1e1e1e' : '#f0f8ff',
-                  borderRadius: '10px',
-                  borderLeft: `4px solid ${darkMode ? '#bb86fc' : '#007bff'}`
-                }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <p style={{
-                  color: darkMode ? '#ffffff' : '#333333',
-                  textAlign: 'center',
-                  lineHeight: '1.6'
-                }}>
-                  <strong>Note:</strong> Our FDA approval means each product has undergone rigorous testing 
-                  to ensure safety and effectiveness for your specific skin concerns.
-                </p>
-              </motion.div>
             </motion.div>
 
-            {/* Enhanced Skin Care Form Section */}
+            {/* Skin Care Form Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -589,111 +699,121 @@ const Home = () => {
         )}
       </main>
 
-      {/* Enhanced Footer */}
-      <footer style={{
-        backgroundColor: darkMode ? "#1e1e1e" : "#007bff",
-        color: "#ffffff",
-        padding: "40px 20px",
-        marginTop: "auto"
-      }}>
-        <div style={{
+      {/* Enhanced Creative Footer */}
+      <footer 
+        className="site-footer"
+        style={{
+          backgroundColor: darkMode ? "#1a1a1a" : "#2c3e50",
+          color: "#ffffff",
+          padding: "60px 20px 30px",
+          marginTop: "auto",
+          position: "relative"
+        }}
+      >
+        <div className="footer-wave" style={{
+          position: 'absolute',
+          top: '-50px',
+          left: 0,
+          width: '100%',
+          height: '50px',
+          background: `url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="${darkMode ? '#1a1a1a' : '#2c3e50'}" opacity="1"/></svg>')`,
+          backgroundSize: '1200px 50px'
+        }}></div>
+
+        <div className="footer-container" style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "40px",
-          maxWidth: "1200px",
-          margin: "0 auto"
+          gap: "40px"
         }}>
-          {/* Developed By */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h3 style={{
-              fontSize: "1.2rem",
-              marginBottom: "15px",
-              fontWeight: "600"
-            }}>
-              
-            </h3>
-            <p style={{ marginBottom: "5px" }}></p>
-            <p> </p>
-          </motion.div>
-
-          {/* Contact */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            <h3 style={{
-              fontSize: "1.2rem",
-              marginBottom: "15px",
-              fontWeight: "600"
-            }}>
-              Contact Us
-            </h3>
-            <div style={{ 
-              display: "flex", 
-              alignItems: "center",
-              justifyContent: "flex-start",
-              gap: "8px"
-            }}>
-              <FiMail />
-              <a 
-                href="mailto:lordglory@gmail.com" 
-                style={{ 
-                  color: "#ffffff",
-                  textDecoration: "none",
-                  ":hover": {
-                    textDecoration: "underline"
-                  }
+          {footerSections.map((section) => (
+            <motion.div 
+              key={section.id}
+              className="footer-section"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.div 
+                className="footer-section-header"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  paddingBottom: '15px',
+                  borderBottom: `1px solid ${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)'}`
                 }}
+                onClick={() => toggleFooterItem(section.id)}
+                whileHover={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
               >
-                lordgloryindia@gmail.com,
-                <br/>
-                -8551062783
-              </a>
-            </div>
-          </motion.div>
+                <h3 style={{
+                  fontSize: "1.2rem",
+                  fontWeight: "600",
+                  margin: 0,
+                  color: "#bb86fc"
+                }}>
+                  {section.title}
+                </h3>
+                <motion.div
+                  animate={{ rotate: expandedFooterItem === section.id ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <FiChevronDown />
+                </motion.div>
+              </motion.div>
 
-          {/* About Us */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <h3 style={{
-              fontSize: "1.2rem",
-              marginBottom: "15px",
-              fontWeight: "600"
-            }}>
-              About Us
-            </h3>
-            <p>
-              Lord Glory provides Clinically-approved skincare solutions backed by science and loved by users worldwide.
-            </p>
-          </motion.div>
+              <AnimatePresence>
+                {expandedFooterItem === section.id && (
+                  <motion.div
+                    className="footer-section-content"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    {section.content}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
         </div>
 
-        <motion.p
-          style={{ 
+        <motion.div 
+          className="footer-bottom"
+          style={{
             textAlign: "center",
-            marginTop: "40px",
-            fontSize: "0.9rem",
-            opacity: 0.8
+            marginTop: "60px",
+            paddingTop: "30px",
+            borderTop: `1px solid ${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)'}`
           }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
         >
-          © {new Date().getFullYear()} Lord Glory. All rights reserved.
-        </motion.p>
+          <p style={{ 
+            fontSize: "0.9rem",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '5px'
+          }}>
+            Made with <FiHeart color="#ff6b6b" /> in India
+          </p>
+          <p style={{ fontSize: "0.8rem", opacity: 0.7, marginTop: '10px' }}>
+            © {new Date().getFullYear()} Lord Glory. All rights reserved.
+          </p>
+        </motion.div>
       </footer>
     </motion.div>
   );
 };
 
-// Enhanced Trust Card Component
 const TrustCard = ({ darkMode, title, content, icon }) => (
   <motion.div
     style={{

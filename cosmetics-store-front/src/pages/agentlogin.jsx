@@ -20,7 +20,7 @@ const AgentLogin = () => {
     try {
       console.log("Sending login request...");
       const response = await axios.post(
-        "http://localhost:5000/api/agents/login",
+        "${process.env.REACT_APP_API_URL}/api/agents/login",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );

@@ -261,7 +261,7 @@ const ProductPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/payments/phonepe/initiate",
+        "${process.env.REACT_APP_API_URL}/api/payments/phonepe/initiate",
         {
           amount,
           userId,

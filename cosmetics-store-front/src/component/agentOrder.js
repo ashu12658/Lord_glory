@@ -18,7 +18,7 @@ const AgentOrders = () => {
         const config = {
           headers: { Authorization: `Bearer ${agent.token}` },
         };
-        const response = await axios.get('http://localhost:5000/api/agents/orders', config);
+        const response = await axios.get('${process.env.REACT_APP_API_URL}/api/agents/orders', config);
         console.log('Fetched orders:', response.data); // Debugging
         setOrders(response.data || []);
       } catch (error) {

@@ -36,13 +36,13 @@ const AdminDashboard = () => {
 
       try {
         const [usersResponse, ordersResponse, productsResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/admin/users', {
+          axios.get('${process.env.REACT_APP_API_URL}/api/admin/users', {
             headers: { Authorization: `Bearer ${token}` }
           }),
-          axios.get('http://localhost:5000/api/admin/orders', {
+          axios.get('${process.env.REACT_APP_API_URL}/api/admin/orders', {
             headers: { Authorization: `Bearer ${token}` }
           }),
-          axios.get('http://localhost:5000/api/admin/products', {
+          axios.get('${process.env.REACT_APP_API_URL}/api/admin/products', {
             headers: { Authorization: `Bearer ${token}` }
           })
         ]);
@@ -63,10 +63,10 @@ const AdminDashboard = () => {
     const token = localStorage.getItem('adminToken');
     try {
       const [ordersResponse, productsResponse] = await Promise.all([
-        axios.get('http://localhost:5000/api/admin/orders', {
+        axios.get('${process.env.REACT_APP_API_URL}/api/admin/orders', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get('http://localhost:5000/api/admin/products', {
+        axios.get('${process.env.REACT_APP_API_URL}/api/admin/products', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
     const newStatus = orderStatusChanges[orderId];
     try {
       await axios.put(
-        `http://localhost:5000/api/orders/${orderId}`,
+        `${process.env.REACT_APP_API_URL}/api/orders/${orderId}`,
         { orderId, status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -121,7 +121,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem('adminToken');
     try {
       await axios.post(
-        'http://localhost:5000/api/admin/products',
+        '${process.env.REACT_APP_API_URL}/api/admin/products',
         newProduct,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -143,7 +143,7 @@ const AdminDashboard = () => {
   const deleteProduct = async (productId) => {
     const token = localStorage.getItem('adminToken');
     try {
-      await axios.delete(`http://localhost:5000/api/admin/products/${productId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/admin/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       refreshData();
@@ -169,7 +169,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem('adminToken');
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/products/${editingProduct._id}`,
+        `${process.env.REACT_APP_API_URL}/api/admin/products/${editingProduct._id}`,
         editingProduct,
         { headers: { Authorization: `Bearer ${token}` } }
       );

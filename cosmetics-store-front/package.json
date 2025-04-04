@@ -1,8 +1,11 @@
 {
   "name": "cosmetics-store-front",
   "version": "0.1.0",
+  "proxy": "http://localhost:5000",
   "private": true,
   "dependencies": {
+    "ajv": "6.12.6",
+    "ajv-keywords": "3.5.2",
     "axios": "^1.8.1",
     "babel": "^5.8.38",
     "bootstrap": "^5.3.3",

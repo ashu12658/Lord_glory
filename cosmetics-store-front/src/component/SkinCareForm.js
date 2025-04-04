@@ -275,7 +275,7 @@ const SkinCareForm = () => {
       });
 
       await axios.post(
-        "http://localhost:5000/api/skincare/submit-skin-care-form",
+        "${process.env.REACT_APP_API_URL}/api/skincare/submit-skin-care-form",
         formDataToSend,
         {
           headers: {

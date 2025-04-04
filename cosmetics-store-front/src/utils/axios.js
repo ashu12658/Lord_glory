@@ -1,55 +1,104 @@
 import axios from 'axios';
 
-  // Create an Axios instance with a base URL to the backend
-  const instance = axios.create({
-    baseURL: 'http://localhost:5000/api',  // Ensure this is pointing to your backend's /api routes
+// Configure Axios instance with environment-aware settings
+const instance = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || 'https://69.62.73.88',
+  timeout: 15000, // 15-second timeout
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
+
+// ======================
+// Request Interceptor
+// ======================
+instance.interceptors.request.use(
+  (config) => {
+    // Attach auth token if available
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // Add request timestamp for debugging
+    config.metadata = { startTime: new Date() };
+    
+    return config;
+  },
+  (error) => {
+    console.error('Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// ======================
+// Response Interceptor
+// ======================
+instance.interceptors.response.use(
+  (response) => {
+    // Log request duration
+    if (response.config.metadata?.startTime) {
+      const endTime = new Date();
+      const duration = endTime - response.config.metadata.startTime;
+      console.debug(`API call to ${response.config.url} took ${duration}ms`);
+    }
+    
+    return response;
+  },
+  (error) => {
+    // Enhanced error handling
+    if (error.response) {
+      switch (error.response.status) {
+        case 401: // Unauthorized
+          localStorage.removeItem('token');
+          sessionStorage.removeItem('token');
+          window.location.href = '/login?session_expired=true';
+          break;
+
+        case 403: // Forbidden
+          window.location.href = '/unauthorized';
+          break;
+
+        case 429: // Rate limited
+          console.warn('Rate limited:', error.response.data);
+          break;
+
+        case 500: // Server error
+          console.error('Server error:', error.response.data);
+          break;
+
+        default:
+          console.error('API Error:', error.response.status, error.response.data);
+      }
+    } else if (error.request) {
+      console.error('Network Error:', 'No response received');
+    } else {
+      console.error('Request Setup Error:', error.message);
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// ======================
+// Custom Methods
+// ======================
+/**
+ * Helper method for making authenticated requests
+ */
+instance.authenticatedRequest = async (config) => {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No authentication token available');
+  
+  return instance({
+    ...config,
+    headers: {
+      ...config.headers,
+      Authorization: `Bearer ${token}`
+    }
   });
+};
 
-  // Add an interceptor to include the token in all requests
-  instance.interceptors.request.use(
-    (config) => {
-      // Retrieve token from local storage
-      const token = localStorage.getItem('token');
-
-      if (token) {
-        // Attach token to the request header if available
-        config.headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      return config;  // Return the modified config
-    },
-    (error) => {
-      // Handle request errors (e.g., network issues)
-      return Promise.reject(error);
-    }
-  );
-
-  // Add a response interceptor to handle unauthorized errors
-  instance.interceptors.response.use(
-    (response) => {
-      return response;  // If the request is successful, return the response
-    },
-    (error) => {
-      // Check if the error is due to unauthorized access (status code 401)
-      if (error.response && error.response.status === 401) {
-        // If a 401 (Unauthorized) error occurs
-        console.error('Unauthorized request, redirecting to login...');
-        
-        // Clear the token from localStorage
-        localStorage.removeItem('authToken');
-        
-        // Redirect the user to the login page
-        window.location.href = '/login';  // Adjust the URL if necessary
-      }
-
-      // Handle other types of errors if necessary
-      if (error.response && error.response.status === 500) {
-        console.error('Internal server error. Please try again later.');
-      }
-
-      // Return the error so that it can be handled later in the calling component
-      return Promise.reject(error);
-    }
-  );
-
-  export default instance;  // Export the configured axios instance
+export default instance;

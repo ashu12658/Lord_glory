@@ -48,7 +48,7 @@ const PaymentConfirmation = () => {
         setLoading(true);
         
         const orderResponse = await axios.get(
-          `http://localhost:5000/api/orders/${orderId}`,
+          `${process.env.REACT_APP_API_URL}/api/orders/${orderId}`,
           {
             headers: { 
               Authorization: `Bearer ${localStorage.getItem("token")}` 
@@ -60,7 +60,7 @@ const PaymentConfirmation = () => {
         setOrderDetails(orderData);
 
         const userResponse = await axios.get(
-          `http://localhost:5000/api/users/${orderData.user}`,
+          `${process.env.REACT_APP_API_URL}/api/users/${orderData.user}`,
           {
             headers: { 
               Authorization: `Bearer ${localStorage.getItem("token")}` 

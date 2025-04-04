@@ -11,7 +11,7 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/login', { email, password });
+      const response = await axios.post('${process.env.REACT_APP_API_URL}/api/admin/login', { email, password });
       localStorage.setItem('adminToken', response.data.token); // Store token
       navigate('/admin-dashboard'); // Redirect to the admin dashboard
     } catch (err) {
