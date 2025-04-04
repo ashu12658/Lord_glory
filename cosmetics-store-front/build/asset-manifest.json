@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.3dc4429a.css",
-    "main.js": "/static/js/main.ef7247cb.js",
+    "main.js": "/static/js/main.cc91d1ca.js",
     "static/media/product.jpeg": "/static/media/product.a35f3e6e56a9695e2304.jpeg",
     "static/media/pimples.jpeg": "/static/media/pimples.a0de7917c4064c023291.jpeg",
     "static/media/pig.jpg": "/static/media/pig.3db639506ff0a5034422.jpg",
@@ -16,6 +16,6 @@
   },
   "entrypoints": [
     "static/css/main.3dc4429a.css",
-    "static/js/main.ef7247cb.js"
+    "static/js/main.cc91d1ca.js"
   ]
 }

@@ -417,7 +417,6 @@ const SkinCareForm = () => {
             multiple
             accept="image/*"
             onChange={handleImageChange}
-            required
           />
           <label htmlFor="file-upload">
             <FiUpload size={14} />
