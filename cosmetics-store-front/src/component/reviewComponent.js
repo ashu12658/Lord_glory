@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ReviewComponent = () => {
-  const { productId } = useParams();
+  const navigate = useNavigate();
+  const productId = "67f02a6371af011145853dd2"; // 🔁 Replace with actual product ID
+
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [formData, setFormData] = useState({
@@ -18,15 +20,22 @@ const ReviewComponent = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!productId) return;
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate(`/login?redirect=/reviews/${productId}`);
+    }
+  }, [navigate, productId]);
+
+  useEffect(() => {
     axios
       .get(`http://localhost:5000/api/products/${productId}`)
       .then((response) => setProduct(response.data))
       .catch(() => setError("❌ Failed to load product details."));
   }, [productId]);
 
+  // Reviews fetch - disabled
+  /*
   const fetchReviews = useCallback(() => {
-    if (!productId) return;
     axios
       .get(`http://localhost:5000/api/reviews/${productId}`)
       .then((response) => setReviews(response.data))
@@ -36,6 +45,7 @@ const ReviewComponent = () => {
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);
+  */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +54,6 @@ const ReviewComponent = () => {
 
   const submitReview = async (e) => {
     e.preventDefault();
-    if (!productId) return alert("❌ Product ID is missing.");
     try {
       await axios.post(
         "http://localhost:5000/api/reviews/review",
@@ -53,7 +62,6 @@ const ReviewComponent = () => {
       );
       alert("✅ Review submitted successfully!");
       setFormData({ rating: 5, reviewText: "", certifiedBuyerName: "", location: "" });
-      fetchReviews();
     } catch {
       setError("❌ Failed to submit review.");
     }
@@ -73,14 +81,17 @@ const ReviewComponent = () => {
 
   return (
     <div style={{ maxWidth: "500px", margin: "auto", background: "#f8f9fa", padding: "20px", borderRadius: "15px", boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)", textAlign: "center" }}>
-      <h2 style={{ color: "#007bff", fontSize: "24px", fontWeight: "bold" }}>🌟 Welcome to <span style={{ color: "#ff4081" }}>Lord Glory</span> Reviews 🌟</h2>
+      <h2 style={{ color: "#007bff", fontSize: "24px", fontWeight: "bold" }}>
+        🌟 Welcome to <span style={{ color: "#ff4081" }}>Lord Glory</span> Reviews 🌟
+      </h2>
+
       {product && (
         <div style={{ marginBottom: "15px" }}>
           <h2>{product.name}</h2>
-          <img src={product.image} alt={product.name} style={{ maxWidth: "100%", height: "auto", borderRadius: "10px" }} />
         </div>
       )}
-      <h3>💬 Customer Reviews ({reviews.length})</h3>
+
+      {/* <h3>💬 Customer Reviews ({reviews.length})</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {reviews.length > 0 ? (
         <Slider {...sliderSettings}>
@@ -94,13 +105,65 @@ const ReviewComponent = () => {
         </Slider>
       ) : (
         <p>No reviews yet. Be the first to review! 😊</p>
-      )}
+      )} */}
+
       <form onSubmit={submitReview} style={{ marginTop: "20px" }}>
         <h3>📝 Share Your Experience</h3>
-        <input type="text" name="certifiedBuyerName" placeholder="Your Name" value={formData.certifiedBuyerName} onChange={handleChange} required style={{ width: "100%", padding: "8px", marginBottom: "10px", borderRadius: "8px", border: "1px solid #ddd" }} />
-        <textarea name="reviewText" placeholder="Write your review..." value={formData.reviewText} onChange={handleChange} required style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ddd", resize: "none" }} />
-        <input type="text" name="location" placeholder="Your Location" value={formData.location} onChange={handleChange} required style={{ width: "100%", padding: "8px", marginBottom: "10px", borderRadius: "8px", border: "1px solid #ddd" }} />
-        <button type="submit" style={{ width: "100%", padding: "12px", background: "#007bff", color: "#fff", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer" }}>Submit Review 🚀</button>
+
+        <input
+          type="text"
+          name="certifiedBuyerName"
+          placeholder="Your Name"
+          value={formData.certifiedBuyerName}
+          onChange={handleChange}
+          required
+          style={{ width: "100%", padding: "8px", marginBottom: "10px", borderRadius: "8px", border: "1px solid #ddd" }}
+        />
+
+        <textarea
+          name="reviewText"
+          placeholder="Write your review..."
+          value={formData.reviewText}
+          onChange={handleChange}
+          required
+          style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ddd", resize: "none", marginBottom: "10px" }}
+        />
+
+        <input
+          type="text"
+          name="location"
+          placeholder="Your Location"
+          value={formData.location}
+          onChange={handleChange}
+          required
+          style={{ width: "100%", padding: "8px", marginBottom: "10px", borderRadius: "8px", border: "1px solid #ddd" }}
+        />
+
+        {/* ⭐ Star rating input */}
+        <h4 style={{ margin: "10px 0" }}>Your Rating</h4>
+        <div style={{ fontSize: "24px", marginBottom: "15px" }}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <span
+              key={star}
+              onClick={() => setFormData({ ...formData, rating: star })}
+              style={{
+                cursor: "pointer",
+                color: star <= formData.rating ? "#FFD700" : "#ccc",
+                transition: "color 0.3s",
+                marginRight: "5px",
+              }}
+            >
+              ★
+            </span>
+          ))}
+        </div>
+
+        <button
+          type="submit"
+          style={{ width: "100%", padding: "12px", background: "#007bff", color: "#fff", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer" }}
+        >
+          Submit Review 🚀
+        </button>
       </form>
     </div>
   );

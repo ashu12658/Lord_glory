@@ -17,15 +17,13 @@ const agentSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true
     },
     balance: {
         type: Number,
         default: 0
     },
     couponCode: {
-        type: String,
-        unique: true // ✅ Each agent gets a unique coupon code
+        type: String // ✅ Each agent gets a unique coupon code
     }
 }, {
     timestamps: true

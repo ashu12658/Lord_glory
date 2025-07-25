@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-  // Create an Axios instance with a base URL to the backend
-  const instance = axios.create({
-    baseURL: 'http://localhost:5000/api',  // Ensure this is pointing to your backend's /api routes
-  });
+    // Create an Axios instance with a base URL to the backend
+    const instance = axios.create({
+      baseURL: 'http://localhost:5000/api',  // Ensure this is pointing to your backend's /api routes
+    });
 
-  // Add an interceptor to include the token in all requests
+    // Add an interceptor to include the token in all requests
   instance.interceptors.request.use(
     (config) => {
       // Retrieve token from local storage

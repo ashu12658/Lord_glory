@@ -12,9 +12,18 @@ const AdminLogin = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/admin/login', { email, password });
-      localStorage.setItem('adminToken', response.data.token); // Store token
-      navigate('/admin-dashboard'); // Redirect to the admin dashboard
+
+      // Save token to localStorage
+      const token = response.data.token;
+      localStorage.setItem('adminToken', token);
+
+      // Set axios default header for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      // Redirect to admin dashboard
+      navigate('/admin-dashboard');
     } catch (err) {
+      console.error('Login failed:', err);
       setError('Invalid credentials. Please try again.');
     }
   };

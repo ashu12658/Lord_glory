@@ -72,51 +72,54 @@ exports.login = async (req, res) => {
 
     console.log("🔍 Login Attempt - Email:", email);
 
+    // Normalize email
+    const normalizedEmail = email.trim().toLowerCase();
+
     // Find user by email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
+
     if (!user) {
       console.log("❌ User Not Found");
       return res.status(401).json({ message: "Invalid credentials (User not found)" });
     }
 
-    console.log("🔄 Comparing Passwords...");
+    // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
-    
-    console.log("🔍 Password Match Result:", isMatch);
 
     if (!isMatch) {
-      console.log("❌ Login Failed: Incorrect Password");
+      console.log("❌ Incorrect Password");
       return res.status(401).json({ message: "Invalid credentials (Wrong password)" });
     }
 
-    console.log("✅ Password Matched! Generating Token...");
-
-    // Generate JWT token
+    // Generate token
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
 
-    console.log("✅ Login Successful!");
+    console.log("✅ Login Successful");
 
-      res.json({
-        token,
-        user: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-          role: user.role,
-          isAdmin: user.isAdmin, // Ensure this field exists
+    // Return user data
+    res.json({
+      message: "Login successful",
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        isAdmin: user.isAdmin || false, // just in case it's undefined
+      },
+    });
 
-        },
-      });
   } catch (error) {
     console.error("🚨 Login Error:", error.message);
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
+
 
 // Verify if the user is an agent
 exports.verifyAgent = async (req, res, next) => {

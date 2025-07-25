@@ -17,6 +17,10 @@ router.post('/withdraw/:agentId',agent, agentController.withdrawEarnings);
 router.get('/products',agent, agentController.getProducts);
 router.get('/commissions/:agentId',agent, agentController.getAgentCommissions);
 router.get("/orders-count", agent, agentController.getAgentcount);
+router.post('/initiate', agent,agentController.initiateAgentPayment);
+router.post('/payment/callback',agent, agentController.phonePeCallbackForAgent);
+router.get('/get-coupen-user',agent, agentController.getAgentUserCount);
+router.get('/get-balance',agent, agentController.getAgentCouponBalance);
 
 
 module.exports = router;

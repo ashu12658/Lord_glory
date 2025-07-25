@@ -1,5 +1,5 @@
 const express = require("express");
-const { protect, admin } = require('../middleware/authMiddleware');
+const { protect, admin ,authUser } = require('../middleware/authmiddleware');
 const {
   getAllOrder,
   createOrder,
@@ -8,8 +8,11 @@ const {
   getUserOrders,
   placeAgentOrder,
   getAgentOrders,
+  cancelOrder,
+  createTempOrder,
+  completeOrderAfterPayment
 } = require("../controllers/ordercontroller");
-const { agent } = require('../middleware/authMiddleware');
+const { agent } = require('../middleware/authmiddleware');
 const Admin = require("../models/admin");
 
 const router = express.Router();
@@ -30,9 +33,16 @@ router.put("/:id", updateOrderStatus);
 router.get("/:id", protect, getOrderById);
 
 // Agent: Place an order for a customer
-router.post("/agent", protect, placeAgentOrder);
+router.post("/agent", authUser , placeAgentOrder);
 
 // Agent: Get all orders placed by the agent
 router.get("/agent/orders", protect, getAgentOrders);
 
+router.patch('/cancel/:id', protect,cancelOrder);
+
+router.post("/temp", protect, createTempOrder); // Save order temporarily
+router.post("/complete", protect, completeOrderAfterPayment); // Final save after payment
+
 module.exports = router;
+
+

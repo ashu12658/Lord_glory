@@ -38,7 +38,7 @@ exports.submitSkinCareForm = async (req, res) => {
       allergies,
       skincareRoutine,
       otherDetails,
-      image: imageUrl, // Store a single image URL
+      images: imageUrl, // Store a single image URL
     });
 
     // Save to the database

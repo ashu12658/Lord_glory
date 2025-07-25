@@ -366,7 +366,7 @@ const SkinCareForm = () => {
         <CompactCheckboxGroup>
           <CompactLabel>Skin Concerns</CompactLabel>
           <CompactCheckboxOptions>
-            {["Acne", "Dark Spots", "Dryness", "Aging", "Dullness", "Redness"].map((condition) => (
+            {["Pimples/Acne", "Dark Spots", "Dryness", "Aging", "Dullness", "Pigmentation","Melasma","Tanning","Sun Damage","Dark Circle","Skin Glow "].map((condition) => (
               <CompactCheckboxOption 
                 key={condition}
                 checked={formData.skinConditions.includes(condition)}
@@ -417,7 +417,6 @@ const SkinCareForm = () => {
             multiple
             accept="image/*"
             onChange={handleImageChange}
-            required
           />
           <label htmlFor="file-upload">
             <FiUpload size={14} />

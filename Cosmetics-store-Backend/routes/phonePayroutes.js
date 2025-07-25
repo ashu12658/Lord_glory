@@ -7,9 +7,95 @@ const { protect } = require('../middleware/authmiddleware');
 const Agent = require("../models/agentSchema");
 
 
+// // ✅ **Payment Initiation Route**
+// router.post('/initiate', async (req, res) => {
+//   const { amount, userId, products, phone, address, couponCode,pincode } = req.body;
+
+//   // Basic validation
+//   if (!amount || !userId || !products || products.length === 0 || !phone || !address) {
+//     return res.status(400).json({ error: "Amount, User ID, Products, Phone, and Address are required" });
+//   }
+
+//   let discountAmount = 0;
+//   let finalAmount = parseFloat(amount); // Ensure amount is a number
+
+//   // Check if the amount is valid
+//   if (isNaN(finalAmount) || finalAmount <= 0) {
+//     return res.status(400).json({ error: "Invalid amount value" });
+//   }
+
+//   console.log("Initial amount:", finalAmount);
+
+//   // ✅ If a `couponCode` is provided, apply the discount
+//   if (couponCode) {
+//     try {
+//       const coupon = await Coupon.findOne({ code: couponCode, isActive: true });
+
+//       if (!coupon) {
+//         return res.status(400).json({ error: "Invalid or expired coupon" });
+//       }
+
+//       // Calculate discount
+//       discountAmount = (finalAmount * coupon.discount) / 100;
+//       finalAmount -= discountAmount;
+
+//       console.log("Coupon applied:", coupon);
+//       console.log("Discount amount:", discountAmount);
+//       console.log("Final amount after discount:", finalAmount);
+//     } catch (error) {
+//       return res.status(500).json({ error: "Failed to fetch coupon details", message: error.message });
+//     }
+//   }
+
+//   // Validate `finalAmount` after discount application
+//   if (isNaN(finalAmount) || finalAmount <= 0) {
+//     return res.status(400).json({ error: "Invalid final amount after applying discount" });
+//   }
+
+//   // ✅ Format the products array
+//   const formattedProducts = products.map(p => ({
+//     product: p.productId,
+//     quantity: p.quantity
+//   }));
+
+//   try {
+//     // ✅ Create the order
+//     const newOrder = new Order({
+//       user: userId,
+//       product: formattedProducts,
+//       totalAmount: finalAmount,
+//       phone,
+//       address,
+//       pincode,
+//       couponCode: couponCode || null,
+//       discountApplied: discountAmount,
+//       status: "pending"
+//     });
+
+//     const savedOrder = await newOrder.save();
+
+//     // ✅ Generate the payment URL and include `couponCode`
+//     const mockPaymentUrl = `http://localhost:3000/payment-confirmation?orderId=${savedOrder._id}&amount=${finalAmount}&coupon=${couponCode || ''}`;
+
+//     res.json({
+//       success: true,
+//       message: "Mock payment initiated",
+//       data: { paymentUrl: mockPaymentUrl, orderId: savedOrder._id }
+//     });
+
+//   } catch (error) {
+//     console.error("Error creating order:", error);
+//     res.status(500).json({ message: "Failed to create order", error: error.message });
+//   }
+// });
+
+require('dotenv').config(); // ✅ Make sure this is at the top
+
+const FRONTEND_URL = "http://localhost:3000";
+
 // ✅ **Payment Initiation Route**
 router.post('/initiate', async (req, res) => {
-  const { amount, userId, products, phone, address, couponCode,pincode } = req.body;
+  const { amount, userId, products, phone, address, couponCode, pincode } = req.body;
 
   // Basic validation
   if (!amount || !userId || !products || products.length === 0 || !phone || !address) {
@@ -74,8 +160,8 @@ router.post('/initiate', async (req, res) => {
 
     const savedOrder = await newOrder.save();
 
-    // ✅ Generate the payment URL and include `couponCode`
-    const mockPaymentUrl = `http://localhost:3000/payment-confirmation?orderId=${savedOrder._id}&amount=${finalAmount}&coupon=${couponCode || ''}`;
+    // ✅ Generate the payment URL using live domain or fallback
+    const mockPaymentUrl = `${FRONTEND_URL}/payment-confirmation?orderId=${savedOrder._id}&amount=${finalAmount}&coupon=${couponCode || ''}`;
 
     res.json({
       success: true,
@@ -88,6 +174,7 @@ router.post('/initiate', async (req, res) => {
     res.status(500).json({ message: "Failed to create order", error: error.message });
   }
 });
+
 
 // ✅ **Payment Callback Route**
 router.post('/callback', async (req, res) => {

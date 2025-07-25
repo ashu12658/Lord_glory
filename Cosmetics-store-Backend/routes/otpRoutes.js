@@ -53,7 +53,7 @@ router.post('/request-otp', async (req, res) => {
 
     // Send OTP via email (Spam-Free)
     await transporter.sendMail({
-      from: '"Cosmetic Store Support" <' + process.env.EMAIL_USER + '>',
+      from: '"Lorg Glory" <' + process.env.EMAIL_USER + '>',
       to: email,
       subject: '🔐 Your OTP for Password Reset',
       text: `Your OTP for password reset is: ${otp}. It will expire in 10 minutes.`,

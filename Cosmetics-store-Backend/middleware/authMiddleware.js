@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const agentSchema = require('../models/agentSchema');
+const Agent = require('../models/agentSchema'); 
 
 // Register user
 exports.registerUser = async (req, res) => {
@@ -110,36 +111,69 @@ const protect = async (req, res, next) => {
 };
 
 
-// Admin authorization middleware to restrict access to admins only
 const admin = (req, res, next) => {
-  console.log('Admin check:', {
-    userIsAdmin: req.user?.isAdmin,
-    tokenIsAdmin: req.token?.isAdmin,
-    userRole: req.user?.role
-  });
-
-  if (!req.user || (!req.user.isAdmin && !req.token?.isAdmin)) {
+  if (req.user?.role !== 'admin') {
     return res.status(403).json({ message: 'Access denied, admin privileges required' });
   }
 
   next();
 };
 
-const agent = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ msg: "No token provided" });
-    }
 
-    const token = authHeader.split(' ')[1];
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // contains agent id and role
-        next();
-    } catch (err) {
-        res.status(401).json({ msg: "Invalid token" });
-    }
+// const agent = (req, res, next) => {
+//     const authHeader = req.headers['authorization'];
+//     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+//         return res.status(401).json({ msg: "No token provided" });
+//     }
+
+//     const token = authHeader.split(' ')[1];
+//     try {
+//         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//         req.agent = decoded; // contains agent id and role
+//         next();
+//     } catch (err) {
+//         res.status(401).json({ msg: "Invalid token" });
+//     }
+// };
+
+const agent = async (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ msg: "No token provided" });
+  }
+
+  const token = authHeader.split(' ')[1];
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      
+      // 🔍 Fetch the full agent document using decoded.id
+      const agentData = await Agent.findById(decoded.id); 
+      if (!agentData) {
+          return res.status(401).json({ msg: "Unauthorized: Agent not found" });
+      }
+
+      req.agent = agentData; // ✅ attach full agent document
+      next();
+  } catch (err) {
+      console.error("Agent middleware error:", err);
+      res.status(401).json({ msg: "Invalid token" });
+  }
 };
 
+const authUser = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ msg: "No token provided" });
+  }
 
-module.exports = { protect, admin,agent };
+  const token = authHeader.split(' ')[1];
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded; // used in placing order
+      next();
+  } catch (err) {
+      res.status(401).json({ msg: "Invalid token" });
+  }
+};
+
+module.exports = { protect, admin,agent, authUser };

@@ -16,7 +16,7 @@
   const agentRoutes = require("./Cosmetics-store-Backend/routes/agentroute");
   const phonePayRoutes = require("./Cosmetics-store-Backend/routes/phonePayroutes");
   const couponRoutes = require("./Cosmetics-store-Backend/routes/coupenRoutes");
-
+const otproutes = require("./Cosmetics-store-Backend/routes/otproutes");
   // Import Middleware
 
   dotenv.config();
@@ -29,8 +29,12 @@
   // Enable CORS
   app.use(
     cors({
-      origin:  ["http://localhost:3000", "http://lordglory.in"],// Adjust according to the frontend address
-      methods: ["GET", "POST", "PUT", "DELETE"],
+      origin:  ['http://localhost:3000', 
+    'http://69.62.73.88:3000',
+    'http://lordglory.in',
+    'https://lordglory.in',], // Adjust according to the frontend address],
+/// Adjust according to the frontend address
+      methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
     })
@@ -42,7 +46,7 @@
 
   // MongoDB connection
   mongoose
-    .connect("mongodb://127.0.0.1/cosmetics-store")
+    .connect("mongodb+srv://ashishghatol098:ashishghatol098@cluster0.a5c0ocg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     .then(() => console.log("MongoDB connected successfully"))
     .catch((error) => {
       console.error("MongoDB connection error:", error);

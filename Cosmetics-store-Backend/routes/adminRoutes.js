@@ -1,3 +1,33 @@
+// const express = require("express");
+// const { protect, admin } = require('../middleware/authMiddleware');
+// const {
+//   getAlluser,
+//   getAllorder,
+//   getAllproduct,
+//   updateOrderStatus,
+//   createProduct,
+//   deleteProduct,
+//   getAgentReferrals,
+//   updateProduct,
+//   updateTracking,
+// } = require("../controllers/admincontroller");
+
+// const router = express.Router();
+
+// // Apply admin middleware to all routes
+// router.use(protect,admin);
+
+// router.get("/users", getAlluser);
+// router.get("/orders", getAllorder);
+// router.get("/products", getAllproduct);
+// router.put("/update", updateOrderStatus);
+// router.post("/products", createProduct);
+// router.put("/products/:id", updateProduct);
+// router.delete("/products/:id", deleteProduct);
+// router.get("/agent-referrals/:agentId", getAgentReferrals);
+// router.put("/orders/:orderId/tracking", updateTracking);
+
+// module.exports = router;
 const express = require("express");
 const { protect, admin } = require('../middleware/authMiddleware');
 const {
@@ -8,22 +38,38 @@ const {
   createProduct,
   deleteProduct,
   getAgentReferrals,
-  updateProduct, // Ensure correct import
-} = require("../controllers/admincontroller");
+  updateProduct,
+  updateTracking,
+  getAllAgentOrders,
+  markAgentBalancePaid,
+  markCommissionAsPaid
 
+} = require("../controllers/admincontroller");
 
 const router = express.Router();
 
-// Admin routes
-router.use(admin);
+// Apply protect + admin middleware globally
+router.use(protect, admin);
 
-router.get("/users",admin, getAlluser);
-router.get("/orders",admin, getAllorder);
-router.get("/products",admin, getAllproduct);
-router.put("/update",admin, updateOrderStatus);
-router.post("/products",admin, createProduct);
-router.put("/products/:id",admin, updateProduct);
-router.delete("/products/:id",admin, deleteProduct); // Ensure only ONE delete route
-router.get("/agent-referrals/:agentId",admin, getAgentReferrals);
+// Users
+router.get("/users", getAlluser);
+
+// Products
+router.get("/products", getAllproduct);
+router.post("/products", createProduct);
+router.put("/products/:id", updateProduct);
+router.delete("/products/:id", deleteProduct);
+router.post('/mark-agent-balance-paid', markAgentBalancePaid);
+
+// Orders
+router.get("/orders", getAllorder);
+router.put("/orders/status", updateOrderStatus);
+router.put("/orders/:orderId/tracking", updateTracking);
+// Agent Referrals
+router.get("/agent-referrals/:agentId", getAgentReferrals);
+router.put('/commissions/:commissionId/mark-paid', markCommissionAsPaid);
+
 
 module.exports = router;
+
+
