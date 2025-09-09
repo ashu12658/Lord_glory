@@ -1,6 +1,6 @@
 const Order = require('../models/order'); // Order model
 const Product = require('../models/product'); // Product model
-const { protect } = require('../middleware/authmiddleware'); 
+const { protect } = require('../middleware/authMiddleware'); 
 const mongoose = require('mongoose');
 const Coupon = require('../models/coupenCode'); // Coupon model 
 
