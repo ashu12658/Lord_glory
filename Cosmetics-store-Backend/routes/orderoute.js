@@ -1,5 +1,5 @@
 const express = require("express");
-const { protect, admin ,authUser } = require('../middleware/authmiddleware');
+const { protect, admin ,authUser } = require('../middleware/authMiddleware');
 const {
   getAllOrder,
   createOrder,
